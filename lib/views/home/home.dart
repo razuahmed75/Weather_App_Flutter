@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/controllers/weather_controller.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,8 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final productModel = Provider.of<WeatherController>(context, listen: true);
-
+    final controller = Provider.of<WeatherController>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
         title: Text("My Home Page"),
@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // SizedBox(height: 40),
             Container(
               height: 300,
-              child: productModel.isLoading && productModel.weatherData == null
+              child: controller.isLoading
                   ? Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -58,20 +58,25 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     )
                   : ListView.builder(
-                      itemCount: productModel.weatherData != null
-                          ? productModel.weatherData!.weather.length
+                      itemCount: controller.weatherData != null
+                          ? controller.weatherData!.weather.length
                           : 0,
                       itemBuilder: (_, index) {
-                        var datas = productModel.weatherData!.weather[index];
-
+                        var datas = controller.weatherData!.weather[index];
+                        controller.convertTimestamp(controller.weatherData!.dt);
                         return Card(
                           child: ListTile(
+                            leading: Text(controller.formatedTime.toString()),
                             title: Text(datas.description.toString()),
+                            // title: Text(datas.description.toString()),
                             subtitle: Text("Wind: " +
-                                productModel.weatherData!.wind.speed
-                                    .toString() +
+                                controller.weatherData!.wind.speed.toString() +
                                 "km/h"),
-                            trailing: Text(datas.id.toString()),
+                            trailing: Text("Temp: " +
+                                controller.weatherData!.main.temp
+                                    .floor()
+                                    .toString() +
+                                "°"),
                           ),
                         );
                       }),

@@ -1,8 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:weather_app/utils/app_consts.dart';
-
 import '../models/weather_model.dart';
 
 class WeatherApiClass {
@@ -20,10 +20,13 @@ class WeatherApiClass {
     try {
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
-        result = WeatherModel.fromJson(data);
+        result = weatherModelFromJson(response.body);
+        print(data.toString());
+        print("The printed value is: " + data["weather"][0]["main"].toString());
+        return result;
       }
     } catch (e) {
-      throw Exception("Failed to load data");
+      log("Failed to load weather data");
     }
     return result;
   }

@@ -1,17 +1,14 @@
 import 'package:get/get.dart';
 import 'package:weather_app/views/home/home.dart';
 
+import 'routes_name.dart';
+
 class RouteHelper {
-  /// routes String
-  static String home = "/";
-  // static String sub = "/sub";
+  ///routes method
+  static String getInitial() => RouteName.home;
 
-  /// routes method
-  static String getInitial() => home;
-  // static String getSubScreenRoute() => sub;
-
-  /// routes page list
+  ///routes page list
   static List<GetPage> routes() => [
-        GetPage(name: home, page: () => HomeScreen()),
+        GetPage(name: RouteName.home, page: () => HomeScreen()),
       ];
 }
